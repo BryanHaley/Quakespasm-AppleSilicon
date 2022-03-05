@@ -36,9 +36,9 @@ QS_PAK     := $(QUAKE_DIR)/quakespasm.pak
 ID1_NOTIF := "Copy your id1 folder from your Steam/CD install of Quake into this folder, and make sure id1/pak0.pak and id1/pak1.pak are lower case!"
 
 # Targets
-all: compile app
+all: app
 	
-app:
+app: compile
 	$(MKDIR) $(APP_EXE)
 	$(MKDIR) $(APP_EXE)/Contents
 	$(MKDIR) $(APP_EXE)/Contents/MacOS
@@ -52,7 +52,7 @@ app:
 compile:
 	$(CD) $(QUAKE_DIR) && $(MAKE) -f $(APPLESILICON_MAKEFILE)
 
-distributable: compile app
+distributable: app
 	$(MKDIR) $(DISTRO_DIR)
 	$(CP_DIR) $(APP_EXE) $(DISTRO_DIR)
 	$(TOUCH) $(DISTRO_DIR)/$(ID1_NOTIF_FILE)
