@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>BuildMachineOSBuild</key>
+	<string>11D50</string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>QuakeSpasm</string>
+	<key>CFBundleIconFile</key>
+	<string>QuakeSpasm</string>
+	<key>CFBundleIdentifier</key>
+	<string>net.sf.quakespasm.QuakeSpasm</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>QuakeSpasm</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>0.94.3</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>DTCompiler</key>
+	<string>4.0</string>
+	<key>DTPlatformBuild</key>
+	<string>4D502</string>
+	<key>DTPlatformVersion</key>
+	<string>GM</string>
+	<key>DTSDKBuild</key>
+	<string>9L31a</string>
+	<key>DTSDKName</key>
+	<string>macosx10.5</string>
+	<key>DTXcode</key>
+	<string>0421</string>
+	<key>DTXcodeBuild</key>
+	<string>4D502</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.action-games</string>
+	<key>LSMinimumSystemVersionByArchitecture</key>
+	<dict>
+		<key>i386</key>
+		<string>10.6.0</string>
+		<key>x86_64</key>
+		<string>10.6.0</string>
+	</dict>
+	<key>NSMainNibFile</key>
+	<string>Launcher</string>
+	<key>NSPrincipalClass</key>
+	<string>SDLApplication</string>
+</dict>
+</plist>
