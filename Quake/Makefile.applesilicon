@@ -44,27 +44,30 @@ DEBUG   ?= 0
 # build variables
 # ---------------------------
 
-CC ?= gcc
-LINKER = $(CC)
-LIPO ?= lipo
+CC     := gcc
+LINKER := $(CC)
+LIPO   := lipo
 
-STRIP ?= strip
+STRIP := strip
 
-CPUFLAGS=
-LDFLAGS =
-DFLAGS ?=
-CFLAGS ?= -Wall
-# @rpath can be used when targeting 10.5+
-USE_RPATH=0
-ifeq ($(MACH_TYPE),arm64)
-CFLAGS  +=-mmacosx-version-min=11.0
-LDFLAGS +=-mmacosx-version-min=11.0
-USE_RPATH=1
-endif
+CPUFLAGS :=
+LDFLAGS  :=
+DFLAGS   :=
+CFLAGS   := -Wall
+
+
+CFLAGS    +=-mmacosx-version-min=11.0
+LDFLAGS   +=-mmacosx-version-min=11.0
+
+BREW_PREFIX := $(shell brew --prefix)
+BREW_INCLUDE := $(BREW_PREFIX)/include
+BREW_LIB := $(BREW_PREFIX)/lib
+
+CFLAGS  += -I$(BREW_INCLUDE)
+LDFLAGS += -L$(BREW_LIB)
+CFLAGS += $(shell pkg-config --cflags opusfile)
+
 CFLAGS += $(CPUFLAGS)
-ifeq ($(USE_RPATH),1)
-LDFLAGS+=-Wl,-rpath,@executable_path/../Frameworks
-endif
 
 ifneq ($(DEBUG),0)
 DFLAGS += -DDEBUG
@@ -80,14 +83,6 @@ define do_strip
 	$(call cmd_strip,$(1));
 endef
 endif
-
-BREW_PREFIX := $(shell brew --prefix)
-BREW_INCLUDE := $(BREW_PREFIX)/include
-BREW_LIB := $(BREW_PREFIX)/lib
-
-CFLAGS  += -I$(BREW_INCLUDE)
-LDFLAGS += -L$(BREW_LIB)
-CFLAGS += $(shell pkg-config --cflags opusfile)
 
 ifeq ($(DO_USERDIRS),1)
 CFLAGS += -DDO_USERDIRS=1

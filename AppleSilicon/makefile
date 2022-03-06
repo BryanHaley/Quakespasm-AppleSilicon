@@ -10,6 +10,7 @@ MKDIR  := mkdir -p
 TOUCH  := touch
 ECHO   := echo
 ZIP    := zip -r -X
+INT    := install_name_tool
 
 # Directories
 QUAKE_DIR  := ../Quake
@@ -17,11 +18,14 @@ LPROJ      := English.lproj
 APP_EXE    := Quakespasm-SDL2-AppleSilicon.app
 DISTRO_DIR := Quakespasm
 
+BREW_PREFIX := $(shell brew --prefix)
+
 # Files
 APPLESILICON_MAKEFILE := Makefile.applesilicon
 ID1_NOTIF_FILE := put_id1_here!!!.txt
 
 EXE        := quakespasm
+APP_BINARY := $(APP_EXE)/Contents/MacOS/Quakespasm
 PLIST      := Info.plist
 PKGINFO    := PkgInfo
 ICON       := QuakeSpasm.icns
@@ -46,8 +50,28 @@ app: compile
 	$(CP) $(PLIST) $(APP_EXE)/Contents
 	$(CP) $(PKGINFO) $(APP_EXE)/Contents
 	$(CP) $(ICON) $(APP_EXE)/Contents/Resources
-	$(CP) $(QUAKE_DIR)/$(EXE) $(APP_EXE)/Contents/MacOS/Quakespasm
+	$(CP) $(QUAKE_DIR)/$(EXE) $(APP_BINARY)
 	$(CP_DIR) $(LPROJ) $(APP_EXE)/Contents/Resources
+	# TODO: Don't hard code these paths. Build libs for macOS 11.0 and add binaries to project
+	$(CP_DIR) $(BREW_PREFIX)/opt/flac/lib/libFLAC*.dylib $(APP_EXE)/Contents/MacOS
+	$(INT) -change /opt/homebrew/opt/flac/lib/libFLAC.8.dylib @executable_path/libFLAC.dylib $(APP_BINARY)
+	$(CP_DIR) $(BREW_PREFIX)/opt/opus/lib/libopus*.dylib $(APP_EXE)/Contents/MacOS
+	$(INT) -change /opt/homebrew/opt/opus/lib/libopus.0.dylib @executable_path/libopus.dylib $(APP_BINARY)
+	$(CP_DIR) $(BREW_PREFIX)/opt/opusfile/lib/libopusfile*.dylib $(APP_EXE)/Contents/MacOS
+	$(INT) -change /opt/homebrew/opt/opusfile/lib/libopusfile.0.dylib @executable_path/libopusfile.dylib $(APP_BINARY)
+	$(CP_DIR) $(BREW_PREFIX)/opt/libogg/lib/libogg*.dylib $(APP_EXE)/Contents/MacOS
+	$(INT) -change /opt/homebrew/opt/libogg/lib/libogg.0.dylib @executable_path/libogg.dylib $(APP_BINARY)
+	$(CP_DIR) $(BREW_PREFIX)/opt/libvorbis/lib/libvorbisfile*.dylib $(APP_EXE)/Contents/MacOS
+	$(INT) -change /opt/homebrew/opt/libvorbis/lib/libvorbisfile.3.dylib @executable_path/libvorbisfile.dylib $(APP_BINARY)
+	$(CP_DIR) $(BREW_PREFIX)/opt/libvorbis/lib/libvorbis*.dylib $(APP_EXE)/Contents/MacOS
+	$(INT) -change /opt/homebrew/opt/libvorbis/lib/libvorbis.0.dylib @executable_path/libvorbis.dylib $(APP_BINARY)
+	$(CP_DIR) $(BREW_PREFIX)/opt/mad/lib/libmad*.dylib $(APP_EXE)/Contents/MacOS
+	$(INT) -change /opt/homebrew/opt/mad/lib/libmad.0.dylib @executable_path/libmad.dylib $(APP_BINARY)
+	$(CP_DIR) $(BREW_PREFIX)/opt/libmikmod/lib/libmikmod*.dylib $(APP_EXE)/Contents/MacOS
+	$(INT) -change /opt/homebrew/opt/libmikmod/lib/libmikmod.3.dylib @executable_path/libmikmod.dylib $(APP_BINARY)
+	$(CP_DIR) $(BREW_PREFIX)/opt/sdl2/lib/libSDL2*.dylib $(APP_EXE)/Contents/MacOS
+	$(INT) -change /opt/homebrew/opt/sdl2/lib/libSDL2-2.0.0.dylib @executable_path/libSDL2.dylib $(APP_BINARY)
+
 
 compile:
 	$(CD) $(QUAKE_DIR) && $(MAKE) -f $(APPLESILICON_MAKEFILE)
