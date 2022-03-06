@@ -97,7 +97,7 @@ zip: distributable
 	$(ZIP) $(DISTRO_ZIP) $(DISTRO_DIR)
 
 install_libs:
-	$(BREW) install sdl2 opusfile mad mikmod vorbis-tools
+	$(BREW) install pkg-config sdl2 opusfile mad mikmod vorbis-tools
 
 clean:
 	$(CD) $(QUAKE_DIR) && $(MAKE) -f $(APPLESILICON_MAKEFILE) clean
