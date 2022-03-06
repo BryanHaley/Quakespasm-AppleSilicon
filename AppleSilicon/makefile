@@ -71,12 +71,18 @@ app: compile
 	$(INT) -change /opt/homebrew/opt/libmikmod/lib/libmikmod.3.dylib @executable_path/libmikmod.dylib $(APP_BINARY)
 	$(CP_DIR) $(BREW_PREFIX)/opt/sdl2/lib/libSDL2*.dylib $(APP_EXE)/Contents/MacOS
 	$(INT) -change /opt/homebrew/opt/sdl2/lib/libSDL2-2.0.0.dylib @executable_path/libSDL2.dylib $(APP_BINARY)
+	$(INT) -change /opt/homebrew/opt/libvorbis/lib/libvorbisfile.3.dylib @executable_path/libvorbisfile.dylib $(APP_EXE)/Contents/MacOS/libvorbisfile.dylib
+	$(INT) -change /opt/homebrew/Cellar/libvorbis/1.3.7/lib/libvorbis.0.dylib @executable_path/libvorbis.dylib $(APP_EXE)/Contents/MacOS/libvorbisfile.dylib
+	$(INT) -change /opt/homebrew/opt/libogg/lib/libogg.0.dylib @executable_path/libogg.dylib $(APP_EXE)/Contents/MacOS/libvorbisfile.dylib
 
+signed_app: app
+	sudo codesign -s - -f $(APP_EXE)/Contents/MacOS/libvorbisfile.dylib
+	sudo codesign -s - -f $(APP_BINARY)
 
 compile:
 	$(CD) $(QUAKE_DIR) && $(MAKE) -f $(APPLESILICON_MAKEFILE)
 
-distributable: app
+distributable: signed_app
 	$(MKDIR) $(DISTRO_DIR)
 	$(CP_DIR) $(APP_EXE) $(DISTRO_DIR)
 	$(TOUCH) $(DISTRO_DIR)/$(ID1_NOTIF_FILE)
