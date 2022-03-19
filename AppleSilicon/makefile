@@ -40,6 +40,14 @@ QS_HTML    := ../Quakespasm.html
 QS_LICENSE := ../LICENSE.txt
 QS_PAK     := $(QUAKE_DIR)/quakespasm.pak
 
+# Options
+DEBUG := 0
+AS_MK_OPTIONS := 
+
+ifneq ($(DEBUG), 0)
+	AS_MK_OPTIONS += DEBUG=1
+endif
+
 # Other
 ID1_NOTIF := "Copy your id1 folder from your Steam/CD install of Quake into this folder, and make sure id1/pak0.pak and id1/pak1.pak are lower case!"
 
@@ -58,14 +66,10 @@ app: compile
 	$(CP_DIR) $(LPROJ) $(APP_EXE)/Contents/Resources
 	$(BUNDLE_LIBS) -od -b -x ./$(APP_BINARY) -d ./$(APP_LIBS_DIR)/
 
-signed_app: app
-	sudo codesign -s - -f $(APP_EXE)/Contents/MacOS/libvorbisfile.dylib
-	sudo codesign -s - -f $(APP_BINARY)
-
 compile:
-	$(CD) $(QUAKE_DIR) && $(MAKE) -f $(APPLESILICON_MAKEFILE)
+	$(CD) $(QUAKE_DIR) && $(MAKE) -f $(APPLESILICON_MAKEFILE) $(AS_MK_OPTIONS)
 
-distributable: signed_app
+distributable: app
 	$(MKDIR) $(DISTRO_DIR)
 	$(CP_DIR) $(APP_EXE) $(DISTRO_DIR)
 	$(TOUCH) $(DISTRO_DIR)/$(ID1_NOTIF_FILE)
@@ -88,4 +92,5 @@ clean_app:
 clean: clean_app
 	$(CD) $(QUAKE_DIR) && $(MAKE) -f $(APPLESILICON_MAKEFILE) clean
 	-$(RM_DIR) $(DISTRO_DIR)
+	-$(RM_DIR) libs
 	-$(RM) $(DISTRO_ZIP)
