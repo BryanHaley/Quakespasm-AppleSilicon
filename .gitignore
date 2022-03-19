@@ -27,5 +27,7 @@
 # Build
 Quake/quakespasm
 AppleSilicon/Quakespasm
+AppleSilicon/Quakespasm.app
 AppleSilicon/Quakespasm-SDL2-AppleSilicon.app
 AppleSilicon/Quakespasm.zip
+AppleSilicon/id1

@@ -12,11 +12,15 @@ ECHO   := echo
 ZIP    := zip -r -X
 INT    := install_name_tool
 
+BUNDLE_LIBS := dylibbundler
+
 # Directories
 QUAKE_DIR  := ../Quake
 LPROJ      := English.lproj
 APP_EXE    := Quakespasm-SDL2-AppleSilicon.app
 DISTRO_DIR := Quakespasm
+
+APP_LIBS_DIR := $(APP_EXE)/Contents/libs
 
 BREW_PREFIX := $(shell brew --prefix)
 
@@ -52,28 +56,7 @@ app: compile
 	$(CP) $(ICON) $(APP_EXE)/Contents/Resources
 	$(CP) $(QUAKE_DIR)/$(EXE) $(APP_BINARY)
 	$(CP_DIR) $(LPROJ) $(APP_EXE)/Contents/Resources
-	# TODO: Don't hard code these paths. Build libs for macOS 11.0 and add binaries to project
-	$(CP_DIR) $(BREW_PREFIX)/opt/flac/lib/libFLAC*.dylib $(APP_EXE)/Contents/MacOS
-	$(INT) -change /opt/homebrew/opt/flac/lib/libFLAC.8.dylib @executable_path/libFLAC.dylib $(APP_BINARY)
-	$(CP_DIR) $(BREW_PREFIX)/opt/opus/lib/libopus*.dylib $(APP_EXE)/Contents/MacOS
-	$(INT) -change /opt/homebrew/opt/opus/lib/libopus.0.dylib @executable_path/libopus.dylib $(APP_BINARY)
-	$(CP_DIR) $(BREW_PREFIX)/opt/opusfile/lib/libopusfile*.dylib $(APP_EXE)/Contents/MacOS
-	$(INT) -change /opt/homebrew/opt/opusfile/lib/libopusfile.0.dylib @executable_path/libopusfile.dylib $(APP_BINARY)
-	$(CP_DIR) $(BREW_PREFIX)/opt/libogg/lib/libogg*.dylib $(APP_EXE)/Contents/MacOS
-	$(INT) -change /opt/homebrew/opt/libogg/lib/libogg.0.dylib @executable_path/libogg.dylib $(APP_BINARY)
-	$(CP_DIR) $(BREW_PREFIX)/opt/libvorbis/lib/libvorbisfile*.dylib $(APP_EXE)/Contents/MacOS
-	$(INT) -change /opt/homebrew/opt/libvorbis/lib/libvorbisfile.3.dylib @executable_path/libvorbisfile.dylib $(APP_BINARY)
-	$(CP_DIR) $(BREW_PREFIX)/opt/libvorbis/lib/libvorbis*.dylib $(APP_EXE)/Contents/MacOS
-	$(INT) -change /opt/homebrew/opt/libvorbis/lib/libvorbis.0.dylib @executable_path/libvorbis.dylib $(APP_BINARY)
-	$(CP_DIR) $(BREW_PREFIX)/opt/mad/lib/libmad*.dylib $(APP_EXE)/Contents/MacOS
-	$(INT) -change /opt/homebrew/opt/mad/lib/libmad.0.dylib @executable_path/libmad.dylib $(APP_BINARY)
-	$(CP_DIR) $(BREW_PREFIX)/opt/libmikmod/lib/libmikmod*.dylib $(APP_EXE)/Contents/MacOS
-	$(INT) -change /opt/homebrew/opt/libmikmod/lib/libmikmod.3.dylib @executable_path/libmikmod.dylib $(APP_BINARY)
-	$(CP_DIR) $(BREW_PREFIX)/opt/sdl2/lib/libSDL2*.dylib $(APP_EXE)/Contents/MacOS
-	$(INT) -change /opt/homebrew/opt/sdl2/lib/libSDL2-2.0.0.dylib @executable_path/libSDL2.dylib $(APP_BINARY)
-	$(INT) -change /opt/homebrew/opt/libvorbis/lib/libvorbisfile.3.dylib @executable_path/libvorbisfile.dylib $(APP_EXE)/Contents/MacOS/libvorbisfile.dylib
-	$(INT) -change /opt/homebrew/Cellar/libvorbis/1.3.7/lib/libvorbis.0.dylib @executable_path/libvorbis.dylib $(APP_EXE)/Contents/MacOS/libvorbisfile.dylib
-	$(INT) -change /opt/homebrew/opt/libogg/lib/libogg.0.dylib @executable_path/libogg.dylib $(APP_EXE)/Contents/MacOS/libvorbisfile.dylib
+	$(BUNDLE_LIBS) -od -b -x ./$(APP_BINARY) -d ./$(APP_LIBS_DIR)/
 
 signed_app: app
 	sudo codesign -s - -f $(APP_EXE)/Contents/MacOS/libvorbisfile.dylib
@@ -97,10 +80,12 @@ zip: distributable
 	$(ZIP) $(DISTRO_ZIP) $(DISTRO_DIR)
 
 install_libs:
-	$(BREW) install pkg-config sdl2 opusfile mad mikmod vorbis-tools
+	$(BREW) install pkg-config sdl2 opusfile mad mikmod vorbis-tools dylibbundler
 
-clean:
-	$(CD) $(QUAKE_DIR) && $(MAKE) -f $(APPLESILICON_MAKEFILE) clean
+clean_app: 
 	-$(RM_DIR) $(APP_EXE)
+
+clean: clean_app
+	$(CD) $(QUAKE_DIR) && $(MAKE) -f $(APPLESILICON_MAKEFILE) clean
 	-$(RM_DIR) $(DISTRO_DIR)
 	-$(RM) $(DISTRO_ZIP)
