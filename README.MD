@@ -15,7 +15,13 @@ make distributable
 The result will be an executable ```.app``` bundle inside a folder with other items necessary to run Quakespasm.
 
 ## Running
-Locate the ```id1``` folder from your Steam or CD install of Quake. Copy it into the folder containing ```Quakespasm-SDL2-AppleSilicon.app```. Make sure ```id1```, ```id1/pak0.pak```, and ```id1/pak1.pak``` are all lowercase. Then, simply open ```Quakespasm-SDL2-AppleSilicon.app```.
+Locate the ```id1``` folder from your Steam or CD install of Quake. 
+
+Copy it into the folder containing ```Quakespasm-SDL2-AppleSilicon.app```. 
+
+Make sure ```id1```, ```id1/pak0.pak```, and ```id1/pak1.pak``` are all lowercase. 
+
+Finally, Ctrl+Click to open ```Quakespasm-SDL2-AppleSilicon.app```.
 
 ## Planned
 In the future, a native Metal renderer might be a necessity. Eventually OpenGL will be removed from macOS; it has been deprecated for years now.
