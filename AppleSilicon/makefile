@@ -83,7 +83,7 @@ distributable: app
 zip: distributable
 	$(ZIP) $(DISTRO_ZIP) $(DISTRO_DIR)
 
-install_libs:
+brew_install_tools:
 	$(BREW) install pkg-config sdl2 opusfile mad mikmod vorbis-tools dylibbundler
 
 clean_app: 
