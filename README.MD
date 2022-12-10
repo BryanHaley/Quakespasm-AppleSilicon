@@ -1,4 +1,11 @@
-# Quakespasm on Apple Silicon
+# Attention
+
+You should be using [QSS-M](https://qssm.quakeone.com/) instead. [I assisted in porting it to Apple Silicon](https://github.com/timbergeron/QSS-M/pull/15) and QSS-M supports all the same features of Quakespasm and more.
+
+The original README.MD for this project is retained below for historical purposes.
+
+## Original README.MD
+## Quakespasm on Apple Silicon
 
 This project builds [Quakespasm](http://quakespasm.sourceforge.net/), a Quake engine source port, on Apple Silicon hosts for Apple Silicon targets.
 
